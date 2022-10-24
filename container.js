@@ -83,6 +83,17 @@ class Container {
         }
     };
 
+    async getRandom() {
+        try {
+            const get = await this.getAll();
+            const randomItem = Math.floor(Math.random()*get.length);
+            const getRandom = get[randomItem];
+            return getRandom;
+        }
+        catch (err) {
+            console.log(`Reading ERR! ${err}`);
+        }
+    };
 };
 
 module.exports = Container;
