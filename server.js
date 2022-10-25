@@ -19,7 +19,8 @@ app.get('/', (req, res) => {
         <p>Alumno: Bruno Pontiz</p>
         <p>Curso: Programacion Backend</p>
         <p>Comision: 43490</p>
-        `)
+        `
+    )
 });
 
 // solo traer productos cuando los pedimos
@@ -28,7 +29,11 @@ app.get('/products', async(req, res) => {
     try {
         const pathFile = new Container('./products.json');
         const getProducts = await pathFile.getAll();
-        res.json(getProducts);
+        const productsStringify = JSON.stringify(getProducts);
+        res.send(
+            `<h3>Products:</h3>
+            <p>${productsStringify}</p>`
+        );
     }
     catch (err) {
         console.log(err);
@@ -39,7 +44,11 @@ app.get('/randomProduct', async(req, res) => {
     try {
         const pathFile = new Container('./products.json');
         const getRandomProduct = await pathFile.getRandom();
-        res.json(getRandomProduct);
+        const randomStringify = JSON.stringify(getRandomProduct);
+        res.send(
+            `<h3>Random product:</h3>
+            <p>${randomStringify}</p>`
+        );
     }
     catch (err) {
         console.log(err);
