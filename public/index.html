@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./index.css">
+    <title>API Restful</title>
+</head>
+<body>
+    <h3 class="titleStyle">API Restful Service</h3>
+    <div class="divFormStyle">
+        <form action="/api/products" method="post" name="products" class="formStyle">
+            Name <input type="text" name="name" required class="inputStyle">
+            Price <input type="number" name="price" required class="inputStyle">
+            In stock <input type="text" name="inStock" class="inputStyle" placeholder="yes/no">
+            <div class="buttonsDivStyle">
+                <button type="reset" class="sendButtonStyle">Reset</button>
+                <button type="submit" class="sendButtonStyle">Send</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

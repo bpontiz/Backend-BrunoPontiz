@@ -1,26 +1,26 @@
 [
-  {
-      "name": "Telstar Electronic",
-      "price": 100,
-      "inStock": true,
-      "id": 1
-  },
-  {
-      "name": "Red Circuit",
-      "price": 139,
-      "inStock": true,
-      "id": 2
-  },
-  {
-      "name": "Blue Impedance",
-      "price": 69,
-      "inStock": true,
-      "id": 3
-  },
-  {
-      "name": "Tesla Gunn",
-      "price": 59,
-      "inStock": false,
-      "id": 4
-  }
+    {
+        "name": "Telstar Electronic",
+        "price": 100,
+        "inStock": true,
+        "id": 1
+    },
+    {
+        "name": "Red Circuit",
+        "price": 139,
+        "inStock": true,
+        "id": 2
+    },
+    {
+        "name": "Blue Impedance",
+        "price": 69,
+        "inStock": true,
+        "id": 3
+    },
+    {
+        "name": "Tesla Gunn",
+        "price": 59,
+        "inStock": false,
+        "id": 4
+    }
 ]

@@ -6,9 +6,10 @@ class Container {
         this.file = file;
     };
 
-    async save(newProduct) {
+    async save(req,res) {
         try {
-            const get = await this.getAll();
+            const { name, price, inStock } = req.body;
+            const get = JSON.parse(await fs.promises.readFile('./products.json', 'utf-8'));
             let newId = 0;
             let lastId;
             if (get.length == 0) {
@@ -18,13 +19,15 @@ class Container {
                 lastId = get[get.length - 1].id
                 newId = lastId + 1;
             };
-            const product1 = {
-                ...newProduct,
+            const newProduct = {
+                name: name,
+                price: price,
+                inStock: inStock,
                 id: newId
             };
-            get.push(product1);
-            await fs.promises.writeFile(this.file, JSON.stringify(get, null, 4), 'utf-8');
-            return product1.id;
+            get.push(newProduct);
+            await fs.promises.writeFile('./products.json', JSON.stringify(get, null, 4), 'utf-8');
+            res.send(newProduct);
         }
         catch (err) {
             console.log(`Reading ERR! ${err}`);
@@ -32,12 +35,13 @@ class Container {
         }
     };
 
-    async getByid(id) {
+    async getByid(req, res) {
         try {
-            const get = await this.getAll();
-            const findProduct = get.find( el => el.id === id);
-            await fs.promises.writeFile(this.file, JSON.stringify(findProduct, null, 4), 'utf-8');
-            return findProduct;
+            const { id } = req.params;
+            const idParam = parseInt(id);
+            const get = JSON.parse(await fs.promises.readFile('./products.json', 'utf-8'));
+            const findProduct = get.find( el => el.id === idParam);
+            res.send(findProduct);
         }
         catch (err) {
             console.log(`Reading ERR! ${err}`);
@@ -45,23 +49,54 @@ class Container {
         }
     };
 
-    async getAll() {
+    async getAll(req, res) {
         try {
-            const get = JSON.parse(await fs.promises.readFile(this.file, 'utf-8'));
-            return get;
+            const get = JSON.parse(await fs.promises.readFile('./products.json', 'utf-8'));
+            res.send(get);
         }
         catch (err) {
-            console.log(`Reading ERR! ${err}`);
+            console.log(`Method ERR! ${err}`);
             return [];
         }
     };
 
-    async deleteById(id) {
+    async updateById(req, res) {
         try {
-            const get = await this.getAll();
-            const filterProducts = get.filter(e => e.id !== id);
-            await fs.promises.writeFile(this.file, JSON.stringify(filterProducts, null, 4), 'utf-8');
-            return filterProducts;
+            const { name, price, inStock } = req.body;
+            const { id } = req.params;
+            const idParam = parseInt(id);
+            const get = JSON.parse(await fs.promises.readFile('./products.json', 'utf-8'));
+            const createProduct = {name, price, inStock, "id": idParam};
+            const findProductByIndex = get.findIndex(el => el.id === idParam);
+            if (findProductByIndex !== -1) {
+                get[findProductByIndex] = createProduct; 
+            }
+            else {
+                res.send(`ERR! Product with ${idParam} does not exist.`)
+            }
+            const updatedProducts = await fs.promises.writeFile('./products.json', JSON.stringify(get, null, 4), 'utf-8');
+            res.send(updatedProducts);
+        }
+        catch (err) {
+            console.log(`Reading ERR! ${err}`);
+            return null;
+        }
+    }
+
+    async deleteById(req, res) {
+        try {
+            const { id } = req.params;
+            const idParam = parseInt(id);
+            const get = JSON.parse(await fs.promises.readFile('./products.json', 'utf-8'));
+            const filterProducts = get.filter(e => e.id !== idParam);
+            if( filterProducts.length === 1) {
+                await fs.promises.writeFile('./products.json', JSON.stringify(filterProducts, null, 4), 'utf-8');
+                res.send(filterProducts);
+            }
+            else {
+                res.send(`ERR! Product with ${idParam} does not exist. `);
+            }
+            
         }
         catch(err) {
             console.log(`Reading ERR! ${err}`);
@@ -71,11 +106,11 @@ class Container {
 
     async deleteAll() {
         try {
-            const get = await this.getAll();
+            const get = JSON.parse(await fs.promises.readFile('./products.json', 'utf-8'));
             while (get.length > 0) {
                 get.pop();
             };
-            await fs.promises.writeFile(this.file, JSON.stringify(get, null, 4), 'utf-8');
+            await fs.promises.writeFile('./products.json', JSON.stringify(get, null, 4), 'utf-8');
             return get;
         }
         catch (err) {
@@ -85,7 +120,7 @@ class Container {
 
     async getRandom() {
         try {
-            const get = await this.getAll();
+            const get = JSON.parse(await fs.promises.readFile('./products.json', 'utf-8'));
             const randomItem = Math.floor(Math.random()*get.length);
             const getRandom = get[randomItem];
             return getRandom;
